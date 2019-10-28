@@ -1,104 +1,104 @@
 ---
-title: 'デザインシステム入門'
-tocTitle: '入門'
-description: 'デザインシステムのための最新ツールガイド'
+title: 'デザインシステムの概要'
+tocTitle: '前書き'
+description: 'デザインシステムの向けの最新&プロダクションレディ・ツールガイド'
 ---
 
-<div class="aside">This guide is made for <b>professional developers</b> learning how to build design systems. Intermediate experience in JavaScript, Git, and continuous integration is recommended. You should also know Storybook basics, such as writing a story and editing config files (<a href="/intro-to-storybook">Intro to Storybook</a> teaches basics).
+<div class="aside">このガイドは<b>プロの開発者</b>向けの、デザインシステムの構築方法を学ぶためのガイドラインです。JavaScript、Git、継続的インテグレーション（CI）への中級以上の経験があることが推奨されます。また、ストーリーを書いたり、設定ファイルを編集するなど、Storybookの基礎を知っている必要があります。 (<a href="/intro-to-storybook">Storybookの紹介</a>で基礎が学べます。)
 </div>
 
 <br/>
 
-Design systems are exploding in popularity. From tech heavyweights like Airbnb to nimble startups, organizations of every shape are reusing UI patterns to save time and money. But there’s a chasm between the design systems created by Airbnb, Uber, or Microsoft and the design systems created by most developers.
+デザインシステムの人気が爆発的に高まっています。Airbnbのようななハイテク大手企業から、回転が早いスタートアップまで、あらゆる形の組織でもUIパターンを再利用し、時間とお金を節約しています。しかし、Airbnb、Uber、またはマイクロソフトによって作られたデザインシステムと、大抵の開発者によって作られたデザインシステムの間には溝があります。
 
-Why do leading design systems teams use the tools and techniques they use? My co-author Tom and I researched the traits of successful design systems from the Storybook community to identify best practices.
+どうして一流のデザインシステムチームは彼らが使うツールや技術を使うのでしょうか？共同創業者のTomと私は、ベストプラクティスを特定するために、成功的なデザインシステムの特徴をStorybookコミュニティから調査しました。
 
-This step-by-step guide reveals the automated tooling and careful workflows used in scaled production design systems. We’ll walk through assembling a design system from existing component libraries, then set up core services, libraries, and workflows.
+このステップ・バイ・ステップガイドは、スケールされたプロダクションレベルのデザインシステムに使用されている、自動化されたツールと慎重なワークフローを明らかにします。これから、すでに存在するコンポーネントライブラリーからデザインシステムを組み立て、コアなサービス、ライブラリー、ワークフローをセットアップする全ての過程をガイドして行きます。
 
 ![Design system overview](/design-systems-for-developers/design-system-overview.jpg)
 
-## What’s all the fuss about design systems anyways?
+## 何でデザインシステムで大騒ぎしてるの?
 
-Let’s get something out of the way: the concept of a reusable user interface isn’t new. Styleguides, UI kits, and shareable widgets have existed for decades. Today, designers and developers are aligning towards the UI component construct. A UI component encapsulates the visual and functional properties of discrete user interface pieces. Think LEGO bricks.
+まず整理しておきましょう。再利用可能な UI のコンセプトは新しいものではありません。スタイルガイド、UIキット、そしてシェア可能なウィジェットは何十年も前から存在してきました。今日、デザイナーと開発者は UIコンポーネントを共同で構築しています。UIコンポーネントは、視覚的及び機能的要素といった分離されたUIの特性をカプセル化します。レゴブロックを考えてみてください。
 
-Modern user interfaces are assembled from hundreds of modular UI components that are rearranged to deliver different user experiences.
+モダンなUIは、様々なUXを提供するために再アレンジされた数百のモジュラーUIコンポーネントから組み立てられます。
 
-Design systems contain reusable UI components that help teams build complex, durable, and accessible user interfaces across projects. Since both designers and developers contribute to the UI components, the design system serves as a bridge between disciplines. It is also the “source of truth” for an organization’s common components.
+デザインシステムには、チームが複雑で、耐久性があり、アクセシビリティーが高いUIを構築するのに役立つ、再利用可能なUIコンポーネントが含まれます。デザイナーと開発者の両方がUIコンポーネントに貢献するため、デザインシステムは分野間の橋のような役割を果たします。また、組織の共通コンポーネントの「正のソース」でもあります。
 
 ![Design systems bridge design and development](/design-systems-for-developers/design-system-context.jpg)
 
-Designers often talk about building design systems inside their tools. The holistic scope of a design system encompasses assets (Sketch, Figma, etc.), overarching design principles, contribution structure, governance, and more. There’s an abundance of designer-oriented guides that dive deep into these topics so we won’t rehash that here.
+デザイナーはよく自分達が使ってるツールの中にデザインシステムを構築することについて話します。デザインシステムの全体的な範囲にはアセット（Sketch、Figmaなど）、包括的なデザイン原則、コントリビューションの構造、ガバナンスなどが含まれます。これらのトピックに関しては、デザイナー指向の詳しいガイドが豊富にありますので、ここでの説明は割愛します。
 
-For developers, a few things are certain, production design systems must include the UI components and the frontend infrastructure behind it all. There are three technical parts to a design system that we’ll talk about in this guide:
+開発者にとって明確なことは、デザインシステムにUIコンポーネントとフロントエンドのインフラが全て含まれる必要があることです。このガイドで説明する設計システムには、三つの技術的パーツがあります。
 
-- 🏗 Common reusable UI components
-- 🎨 Design tokens: Styling-specific variables such as brand colors and spacing
-- 📕 Documentation site: Usage instructions, narrative, do’s and don'ts
+- 🏗 共通の再利用可能なUIコンポーネント
+- 🎨 デザイントークン：ブランド色や間隔などのスタイリング固有の変数
+- 📕 ドキュメントサイト：使用方法、説明、すべきこと、してはいけないこと
 
-The parts are packaged up, versioned, and distributed to consumer apps via a package manager.
+このパーツはパッケージ化され、バージョン管理され、パッケージマネージャーを介してコンシューマー向けアプリに分散されます。
 
-## Do you need a design system?
+## あなたはデザインシステムが必要か？
 
-Despite the hype, a design system isn’t a silver bullet. If you work with a modest team on a single app, you’re better off with a directory of UI components instead of setting up the infrastructure to enable a design system. For small projects, the cost of maintenance, integration, and tooling far outweighs any productivity benefits you might see.
+誇大な宣伝にも関わらず、デザインシステムは万能ではありません。単一のアプリであまり大きくないチームで作業する場合、インフラストラクチャをセットアップしてデザインシステムを使うのではなく、UIコンポーネントのディレクトリを使用する方が適切でしょう。小さなプロジェクトの場合、保守、統合、およびツールのコストは、目に見える生産性のメリットを遥かに上回ります。
 
-The economy of scale in a design system works in your favor when sharing UI components across many projects. If you find yourself pasting the same UI components in different apps or across teams, this guide is for you.
+デザインシステムの規模の経済は、多くのプロジェクトでUIを共有する場合に有効です。異なるアプリまたはチーム全体で同じコンポーネントを貼り付けている場合は、このガイドが最適です。
 
-## What we’re building
+## 私達が作っているもの
 
-Storybook powers the design systems for [Uber](https://github.com/uber-web/baseui), [Airbnb](https://github.com/airbnb/lunar), [IBM](https://www.carbondesignsystem.com/), [GitHub](https://primer.style/css/), and hundreds more companies. The recommendations here are inspired by best practices and tools from the smartest teams. We’ll be building the following frontend stack:
+Storybookは、[Uber](https://github.com/uber-web/baseui)、[Airbnb](https://github.com/airbnb/lunar)、[IBM](https://www.carbondesignsystem.com/)、[GitHub](https://primer.style/css/)を含む数百以上の企業のデザインシステムを強化しています。ここでの推奨事項は、最も優秀なチームのベストプラクティスとツールにインスパイアされたもので、次のフロントエンドスタックを構築します。
 
-#### Build components
+#### コンポーネント作成
 
-- 📚 [Storybook](http://storybook.js.org) for UI component development and auto-generated docs
-- ⚛️ [React](https://reactjs.org/) for declarative component-centric UI (via create-react-app)
-- 💅 [Styled-components](https://www.styled-components.com/) for component-scoped styling
-- ✨ [Prettier](https://prettier.io/) for automatic code formatting
+- 📚 [Storybook](http://storybook.js.org)：UIコンポーネント開発及び自動生成ドキュメントのため
+- ⚛️ [React](https://reactjs.org/)：宣言的コンポーネント中心UIのため (create-react-app)
+- 💅 [Styled-components](https://www.styled-components.com/)：コンポーネントにスコープされたスタイリングのため
+- ✨ [Prettier](https://prettier.io/)：自動コードフォーマットのため
 
-#### Maintain the system
+#### システムの維持
 
-- 🚥 [CircleCI](https://circleci.com/) for continuous integration
-- 📐 [ESLint](https://eslint.org/) for JavaScript linting
-- ✅ [Chromatic](https://chromaticqa.com) to catch visual bugs in components (by Storybook maintainers)
-- 🃏 [Jest](https://jestjs.io/) for unit testing components
-- 📦 [npm](https://npmjs.com) for distributing the library
-- 🛠 [Auto](https://github.com/intuit/auto) for release management workflow
+- 🚥 [CircleCI](https://circleci.com/)：継続的インテグレーションのため
+- 📐 [ESLint](https://eslint.org/)：JavaScriptリントのため
+- ✅ [Chromatic](https://chromaticqa.com)：コンポーネント内の視覚的バグをキャッチするため (Storybookメンテナー)
+- 🃏 [Jest](https://jestjs.io/)：コンポーネントのUnitテストのため
+- 📦 [npm](https://npmjs.com)：ライブラリーの配布のため
+- 🛠 [Auto](https://github.com/intuit/auto)：リリース管理ワークフローのため
 
-#### Storybook addons
+#### Storybookアドオン
 
-- ♿ [Accessibility](https://github.com/storybookjs/storybook/tree/master/addons/a11y) to check for accessibility issues during development
-- 💥 [Actions](https://github.com/storybookjs/storybook/tree/master/addons/actions) to QA click and tap interactions
-- 🎛 [Knobs](https://github.com/storybookjs/storybook/tree/master/addons/knobs) to interactively adjust props to experiment with components
-- 📝 [Storysource](https://github.com/storybookjs/storybook/tree/master/addons/storysource) to view story code to paste it in your project
-- 📕 [Docs](https://github.com/storybookjs/storybook/tree/master/addons/docs) for automatic documentation generation from stories
+- ♿ [Accessibility](https://github.com/storybookjs/storybook/tree/master/addons/a11y)：開発中にアクセシビリティーイシューをチェックするため
+- 💥 [Actions](https://github.com/storybookjs/storybook/tree/master/addons/actions)：クリックやタップのインタラクションの品質保証のため
+- 🎛 [Knobs](https://github.com/storybookjs/storybook/tree/master/addons/knobs)：コンポーネントを試すためにpropsをインタラクティブに調整するため
+- 📝 [Storysource](https://github.com/storybookjs/storybook/tree/master/addons/storysource)：Storyのコードを表示してプロジェクトに貼り付けるため
+- 📕 [Docs](https://github.com/storybookjs/storybook/tree/master/addons/docs)：Storiesからの自動ドキュメント生成のため
 
 ![Design system workflow](/design-systems-for-developers/design-system-workflow.jpg)
 
-## Understand the workflow
+## ワークフローを理解する
 
-Design systems are an investment in frontend infrastructure. In addition to showcasing how to use the technology above, this guide also focuses on core workflows that promote adoption and simplify maintenance. Wherever possible, manual tasks will be automated. Below are the activities we’ll encounter.
+デザインシステムは、フロントエンドのインフラのための投資です。このガイドでは、上記の技術の使用方法を紹介するだけではなく、導入を促進し、メンテナンスをシンプルにするコアなワークフローにもフォーカスしています。可能な限り、手動タスクは自動化され、以下が私達が行っていくアクティビティです。
 
-#### Build UI components in isolation
+#### UIコンポーネントを分離して構築する
 
-Every design system is composed of UI components. We’ll use Storybook as a “workbench” to build UI components in isolation outside of our consumer apps. Then we’ll integrate timesaving addons that help you increase component durability (Actions, Source, Knobs).
+全てのデザインシステムはUIコンポーネントで構成されます。Storybookを「ワークベンチ」として使用して、コンシューマーアプリの外部にUIコンポーネントを分離して構築します。次に、コンポーネントの耐久性を向上させるために役立つ、時間を節約するアドオン（Actions、Source、Knob）を結合します。
 
-#### Review to reach consensus and gather feedback
+#### コンセンサスをまとめ、フィードバックを集めるためにレビューする
 
-UI development is a team sport that requires alignment between developers, designers, and other disciplines. We’ll publish work-in-progress UI components to loop stakeholders into the development process so we can ship faster.
+UI開発は、開発者、デザイナー、及びその他の分野間の連携を必要とするチームスポーツです。作業中のUIコンポーネントを公開し、ステークホルダーを開発プロセスに囲い込み、より迅速にリリースできるようにします。
 
-#### Test to prevent UI bugs
+#### UIのバグを防ぐためのテスト
 
-Design systems are a single source of truth and a single point of failure. Minor UI bugs in basic components can snowball into company-wide incidents. We’ll automate tests to help you mitigate the inevitable bugs to ship durable, accessible UI components with confidence.
+デザインシステムは、ただ一つの正のソースであり、ただ一つの障害物です。基本コンポーネントの小さなバグは企業全体のインシデントに雪だるま式に影響する恐れがあります。テストを自動化して、避けられないバグを軽減し、耐久性があり、アクセシビリティーが高いUIコンポーネントを自身を持ってリリースできるようにします。
 
-#### Document to accelerate adoption
+#### 導入を加速させるためのドキュメント
 
-Documentation is essential, but creating it is often a developer’s last priority. We’ll make it much easier for you to document UI components by auto-generating minimum viable docs which can be further customized.
+ドキュメントは不可欠ですが、多くの場合、開発者においてドキュメント作成は最後の優先順位です。必要最低限かつカスタマイズ可能なドキュメントを自動生成することにより、UIコンポーネントをドキュメント化することが遥かに簡単になります。
 
-#### Distribute the design system to consumer projects
+#### デザインシステムをカスタマープロジェクトに適用する
 
-Once you have well-documented UI components, you need to distribute them to other teams. We’ll cover packaging, publishing, and how to surface the design system in other Storybooks.
+上手く文書化されたUIコンポーネントが完成したら、それらを他のチームに配布する必要があります。パッケージング、パブリッシング、及び他のStorybookでデザインシステムを表示する方法について説明します。
 
-## Storybook Design System
+## Storybookデザインシステム
 
-This guide’s example design system was inspired by Storybook’s own [production design system](https://github.com/storybookjs/design-system). It is consumed by three sites and touched by tens of thousands of developers in the Storybook ecosystem.
+Tこのガイドのサンプルデザインシステムは、Storybookの [プロダクションデザインシステム](https://github.com/storybookjs/design-system)にインスパイアされました。それは三つのサイトで使用され、Storybookエコシステムの何万人もの開発者が触れています。
 
-In the next chapter we’ll show you how to extract a design system from disparate component libraries.
+次の章では、異なるコンポーネントライブラリからデザインシステムを抽出する方法を示します。
