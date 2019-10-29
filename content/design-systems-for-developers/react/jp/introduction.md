@@ -32,7 +32,7 @@ description: 'デザインシステムの向けの最新&プロダクション�
 開発者にとって明確なことは、デザインシステムにUIコンポーネントとフロントエンドのインフラが全て含まれる必要があることです。このガイドで説明する設計システムには、三つの技術的パーツがあります。
 
 - 🏗 共通の再利用可能なUIコンポーネント
-- 🎨 デザイントークン：ブランド色や間隔などのスタイリング固有の変数
+- 🎨 デザイントークン：ブランド色や余白などのスタイリング固有の変数
 - 📕 ドキュメントサイト：使用方法、説明、すべきこと、してはいけないこと
 
 このパーツはパッケージ化され、バージョン管理され、パッケージマネージャーを介してコンシューマー向けアプリに分散されます。
@@ -41,7 +41,7 @@ description: 'デザインシステムの向けの最新&プロダクション�
 
 誇大な宣伝にも関わらず、デザインシステムは万能ではありません。単一のアプリであまり大きくないチームで作業する場合、インフラストラクチャをセットアップしてデザインシステムを使うのではなく、UIコンポーネントのディレクトリを使用する方が適切でしょう。小さなプロジェクトの場合、保守、統合、およびツールのコストは、目に見える生産性のメリットを遥かに上回ります。
 
-デザインシステムの規模の経済は、多くのプロジェクトでUIを共有する場合に有効です。異なるアプリまたはチーム全体で同じコンポーネントを貼り付けている場合は、このガイドが最適です。
+デザインシステムの規模の経済は、多くのプロジェクトでUIを共有する場合に有効です。異なるアプリまたはチーム全体で同じコンポーネントをコピペしている場合は、このガイドが最適です。
 
 ## 私達が作っているもの
 
@@ -68,7 +68,7 @@ Storybookは、[Uber](https://github.com/uber-web/baseui)、[Airbnb](https://git
 - ♿ [Accessibility](https://github.com/storybookjs/storybook/tree/master/addons/a11y)：開発中にアクセシビリティーイシューをチェックするため
 - 💥 [Actions](https://github.com/storybookjs/storybook/tree/master/addons/actions)：クリックやタップのインタラクションの品質保証のため
 - 🎛 [Knobs](https://github.com/storybookjs/storybook/tree/master/addons/knobs)：コンポーネントを試すためにpropsをインタラクティブに調整するため
-- 📝 [Storysource](https://github.com/storybookjs/storybook/tree/master/addons/storysource)：Storyのコードを表示してプロジェクトに貼り付けるため
+- 📝 [Storysource](https://github.com/storybookjs/storybook/tree/master/addons/storysource)：Storyのコードを表示してプロジェクトにコピペするため
 - 📕 [Docs](https://github.com/storybookjs/storybook/tree/master/addons/docs)：Storiesからの自動ドキュメント生成のため
 
 ![Design system workflow](/design-systems-for-developers/design-system-workflow.jpg)
